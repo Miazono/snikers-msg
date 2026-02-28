@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Secure Messenger</title>
+    <link rel="stylesheet" href="https://cdn.conversejs.org/11.0.0/dist/converse.min.css">
+    <script src="https://cdn.conversejs.org/3rdparty/libsignal-protocol.min.js"></script>
+    <style>
+        body { margin: 0; padding: 0; height: 100vh; overflow: hidden; }
+        #conversejs { height: 100vh; }
+    </style>
+</head>
+<body>
+    <div id="conversejs"></div>
+    <script src="https://cdn.conversejs.org/11.0.0/dist/converse.min.js"></script>
+    <script>
+        converse.initialize({
+            websocket_url: `wss://${window.location.host}/xmpp-websocket`,
+            authentication: 'login',
+            auto_login: false,
+            view_mode: 'fullscreen',
+            allow_registration: false,
+            omemo_default: true,
+            trusted: true,
+            show_controlbox_by_default: true,
+            allow_contact_requests: true,
+            allow_contact_removal: true,
+            allow_logout: true,
+            message_archiving: 'always',
+            archived_messages_page_size: 50,
+            loglevel: 'warn',
+            theme: 'concord',
+            i18n: 'en'
+        });
+    </script>
+</body>
+</html>
