@@ -3,8 +3,7 @@ converse.plugins.add('snikers-ui', {
         const { api } = this._converse;
 
         api.listen.on('controlboxInitialized', () => {
-
-            // ── Логотип ──────────────────────────────────────────
+            // Заменяем логотип
             const brandLogo = document.querySelector('converse-brand-logo');
             if (brandLogo && !document.getElementById('snikers-brand')) {
                 brandLogo.innerHTML = `
@@ -13,8 +12,7 @@ converse.plugins.add('snikers-ui', {
                         flex-direction: column;
                         align-items: center;
                         padding: 28px 0 16px;
-                        gap: 10px;
-                    ">
+                        gap: 10px;">
                         <img src="/images/logo.svg"
                              width="60" height="60"
                              style="object-fit:contain;"
@@ -23,24 +21,24 @@ converse.plugins.add('snikers-ui', {
                             font-size: 1.15rem;
                             font-weight: 600;
                             color: var(--foreground-color, #e8eaf0);
-                            letter-spacing: -0.02em;
-                        ">Snikers MSG</span>
-                    </div>
-                `;
+                            letter-spacing: -0.02em;">
+                            Snikers MSG
+                        </span>
+                    </div>`;
             }
 
-            // ── Убрать about-блок ──────────────────────────────
+            // Убираем about-блок
             document.querySelector('converse-about')?.remove();
         });
 
-        // ── Автозаполнение (заменяет твой MutationObserver) ────
+        // Автозаполнение формы логина
         api.listen.on('loginInitialized', () => {
-            const jidInput  = document.querySelector('input[name="jid"]');
-            const passInput = document.querySelector('input[type="password"]');
-            const form      = document.querySelector('form');
-            jidInput?.setAttribute('autocomplete', 'username');
-            passInput?.setAttribute('autocomplete', 'current-password');
-            form?.setAttribute('autocomplete', 'on');
+            document.querySelector('input[name="jid"]')
+                ?.setAttribute('autocomplete', 'username');
+            document.querySelector('input[type="password"]')
+                ?.setAttribute('autocomplete', 'current-password');
+            document.querySelector('form')
+                ?.setAttribute('autocomplete', 'on');
         });
     }
 });
