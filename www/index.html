@@ -4,8 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Secure Messenger</title>
-    <link rel="stylesheet" href="https://cdn.conversejs.org/12.0.0/dist/converse.min.css">
-    <script src="https://cdn.conversejs.org/3rdparty/libsignal-protocol.min.js"></script>
+    <link rel="stylesheet" href="/converse/dist/converse.min.css">
+
+    <script src="https://cdn.conversejs.org/12.0.0/dist/locales/ru-LC_MESSAGES-converse-po.js"></script>
+
+    <script src="/converse/dist/converse.min.js"></script>
     <style>
         body { margin: 0; padding: 0; height: 100vh; overflow: hidden; }
         #conversejs { height: 100vh; }
@@ -20,11 +23,10 @@
             websocket_url: `wss://${window.location.host}/xmpp-websocket`,
             authentication: 'login',
             keepalive: true,
-            auto_login: true,
             view_mode: 'fullscreen',
             allow_registration: true,
             omemo_default: true,
-            trusted: true,
+            trusted: false,
             show_controlbox_by_default: true,
             allow_contact_requests: true,
             sounds_path: '/converse/dist/sounds/',
@@ -39,8 +41,8 @@
             send_chat_markers: true,  
             archived_messages_page_size: 50,
             loglevel: 'warn',
-            theme: 'concord',
-            i18n: 'ru'
+            theme: 'dracula',
+            i18n: window.__ru_locale
         });
     </script>
     <script>
