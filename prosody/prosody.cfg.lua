@@ -46,7 +46,7 @@ cross_domain_bosh = true
 http_file_share_size_limit = 10485760    -- 10 MB на файл
 http_file_share_daily_quota = 104857600  -- 100 MB в сутки на пользователя
 http_file_share_expire_after = 60 * 60 * 24 * 7  -- хранить 7 дней
-http_external_url = "https://chat.pavloman.ru"
+http_external_url = "https://" .. (os.getenv("DOMAIN"))
 
 limits = {
     c2s = {

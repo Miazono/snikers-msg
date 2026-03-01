@@ -1,0 +1,9 @@
+# Секреты и окружение
+.env
+.env.local
+.env.*.local
+
+# Сертификаты — игнорируем всё содержимое, но не сами папки
+certs/**
+!certs/**/.gitkeep
+!certs/.gitkeep
