@@ -19,6 +19,10 @@ modules_enabled = {
     "pubsub";
     "pep";
     
+    -- vCard
+    "vcard4";
+    "vcard_legacy";
+    
     -- Web
     "websocket";
     "http";

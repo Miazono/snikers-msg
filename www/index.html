@@ -5,10 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Secure Messenger</title>
     <link rel="stylesheet" href="/converse/dist/converse.min.css">
+    <link rel="stylesheet" href="/custom/custom.css">
 
-    <script src="https://cdn.conversejs.org/12.0.0/dist/locales/ru-LC_MESSAGES-converse-po.js"></script>
-
-    <script src="/converse/dist/converse.min.js"></script>
     <style>
         body { margin: 0; padding: 0; height: 100vh; overflow: hidden; }
         #conversejs { height: 100vh; }
@@ -17,7 +15,10 @@
 
 <body>
     <div id="conversejs"></div>
-    <script src="https://cdn.conversejs.org/12.0.0/dist/converse.min.js"></script>
+    <script src="/converse/dist/locales/ru-LC_MESSAGES-converse-po.js"></script>
+    <script src="/converse/dist/converse.min.js"></script>
+    <script src="plugin.js"></script>
+
     <script>
         converse.initialize({
             websocket_url: `wss://${window.location.host}/xmpp-websocket`,
@@ -41,25 +42,38 @@
             send_chat_markers: true,  
             archived_messages_page_size: 50,
             loglevel: 'warn',
-            theme: 'dracula',
+            theme: 'default',
             i18n: window.__ru_locale
         });
-    </script>
-    <script>
-        const observer = new MutationObserver(() => {
-            const jidInput  = document.querySelector('input[name="jid"]');
-            const passInput = document.querySelector('input[type="password"]');
-            const form      = document.querySelector('form');
+    //     const brandObserver = new MutationObserver(() => {
+    //         // Удаляем converse-about (версия, спонсоры, Opkode)
+    //         const aboutEl = document.querySelector('converse-about');
+    //         if (aboutEl) {
+    //             aboutEl.remove();
+    //             brandObserver.disconnect();
+    //         }
+    //     });
 
-            if (jidInput && passInput && form) {
-                jidInput.setAttribute('autocomplete', 'username');
-                passInput.setAttribute('autocomplete', 'current-password');
-                form.setAttribute('autocomplete', 'on');
-                observer.disconnect();
-            }
-        });
+    //     brandObserver.observe(document.getElementById('conversejs'), {
+    //         childList: true,
+    //         subtree: true
+    //     });
+    // </script>
+    // <script>
+    //     const observer = new MutationObserver(() => {
+    //         const jidInput  = document.querySelector('input[name="jid"]');
+    //         const passInput = document.querySelector('input[type="password"]');
+    //         const form      = document.querySelector('form');
 
-        observer.observe(document.body, { childList: true, subtree: true });
-    </script>
+    //         if (jidInput && passInput && form) {
+    //             jidInput.setAttribute('autocomplete', 'username');
+    //             passInput.setAttribute('autocomplete', 'current-password');
+    //             form.setAttribute('autocomplete', 'on');
+    //             observer.disconnect();
+    //         }
+    //     });
+
+    //     observer.observe(document.body, { childList: true, subtree: true });
+    // </script>
 </body>
 </html>

@@ -1,0 +1,41 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
+
+:root,
+.conversejs,
+converse-bg {
+    --converse-body-font-family: 'Inter', -apple-system, sans-serif;
+    --background-color:         #0d0303;
+    --foreground-color:         #e8eaf0;
+    --converse-body-bg:         #0d0303;
+    --converse-body-color:      #e8eaf0;
+    --primary-color:            #6366f1 !important;
+    --converse-primary:         #6366f1;
+    --link-color:               #6366f1;
+    --focus-color:              #6366f1;
+    --controlbox-pane-bg-color: #161823;
+    --converse-secondary-bg:    #161823;
+    --chat-status-online:       #22c55e;
+    --chat-status-offline:      #6b7280;
+    --chat-status-away:         #f59e0b;
+    --chat-status-busy:         #ef4444;
+}
+
+/* Убираем стандартный логотип и текст Converse
+#conversejs converse-logo,
+#conversejs .brand-name {
+    display: none !important;
+}
+#conversejs .brand-heading {
+    pointer-events: none;
+    text-decoration: none;
+} */
+
+/* Убираем весь блок "about" с версией и спонсорами */
+#conversejs converse-about {
+    display: none !important;
+}
+
+/* Страховка — если футер рендерится в другом контейнере */
+#conversejs footer {
+    display: none !important;
+}
