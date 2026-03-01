@@ -1,6 +1,7 @@
 ---------- Server-wide settings ----------
 
 plugin_paths = {}
+pidfile = "/var/run/prosody/prosody.pid"
 
 modules_enabled = {
     -- Core
@@ -21,7 +22,9 @@ modules_enabled = {
     -- Web
     "websocket";
     "http";
-    
+    "bosh";
+    "http_file_share";  
+
     -- Admin
     "admin_adhoc";
     "blocklist";
@@ -36,6 +39,14 @@ allow_registration = false
 c2s_require_encryption = true
 s2s_require_encryption = true
 consider_websocket_secure = true
+cross_domain_websocket = true
+cross_domain_bosh = true 
+
+-- Files
+http_file_share_size_limit = 10485760    -- 10 MB на файл
+http_file_share_daily_quota = 104857600  -- 100 MB в сутки на пользователя
+http_file_share_expire_after = 60 * 60 * 24 * 7  -- хранить 7 дней
+http_external_url = "https://chat.pavloman.ru"
 
 limits = {
     c2s = {
@@ -46,8 +57,10 @@ limits = {
 c2s_stanza_size_limit = 256 * 1024
 
 log = {
-    warn = "*syslog";
-    error = "*syslog";
+    info  = "*console";
+    debug = "*console";
+    warn  = "*console";
+    error = "*console";
 }
 
 storage = "sql"

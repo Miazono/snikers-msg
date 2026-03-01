@@ -20,7 +20,7 @@ services:
       - xmpp-net
 
   prosody:
-    image: prosody/prosody:latest
+    build: ./prosody
     container_name: xmpp-prosody
     restart: unless-stopped
     ports:
@@ -34,6 +34,7 @@ services:
       - LOCAL=${PROSODY_ADMIN_USER:-admin}
       - DOMAIN=${DOMAIN}
       - PASSWORD=${PROSODY_ADMIN_PASS}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
     depends_on:
       postgres:
         condition: service_healthy

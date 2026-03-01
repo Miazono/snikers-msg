@@ -11,28 +11,50 @@
         #conversejs { height: 100vh; }
     </style>
 </head>
+
 <body>
     <div id="conversejs"></div>
-    <script src="https://cdn.conversejs.org/11.0.0/dist/converse.min.js"></script>
+    <script src="https://cdn.conversejs.org/12.0.0/dist/converse.min.js"></script>
     <script>
         converse.initialize({
             websocket_url: `wss://${window.location.host}/xmpp-websocket`,
             authentication: 'login',
-            auto_login: false,
+            keepalive: true,
+            auto_login: true,
             view_mode: 'fullscreen',
             allow_registration: false,
             omemo_default: true,
             trusted: true,
             show_controlbox_by_default: true,
             allow_contact_requests: true,
+            sounds_path: '/converse/dist/sounds/',
+            play_sounds: true,
             allow_contact_removal: true,
             allow_logout: true,
             message_archiving: 'always',
+            message_receipts: true, 
+            send_chat_markers: true,  
             archived_messages_page_size: 50,
             loglevel: 'warn',
             theme: 'concord',
             i18n: 'en'
         });
+    </script>
+    <script>
+        const observer = new MutationObserver(() => {
+            const jidInput  = document.querySelector('input[name="jid"]');
+            const passInput = document.querySelector('input[type="password"]');
+            const form      = document.querySelector('form');
+
+            if (jidInput && passInput && form) {
+                jidInput.setAttribute('autocomplete', 'username');
+                passInput.setAttribute('autocomplete', 'current-password');
+                form.setAttribute('autocomplete', 'on');
+                observer.disconnect();
+            }
+        });
+
+        observer.observe(document.body, { childList: true, subtree: true });
     </script>
 </body>
 </html>
