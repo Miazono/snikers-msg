@@ -51,5 +51,36 @@ converse.plugins.add('snikers-ui', {
             };
             tryAutofill();
         });
+
+        api.listen.on('getHeadingButtons', (el, buttons) => {
+            // Только для 1-на-1 чатов, не для групп
+            if (el.tagName.toLowerCase() !== 'converse-chat') return buttons;
+
+            buttons.push({
+                a_class: 'start-video-call',
+                handler: (ev) => {
+                    ev.preventDefault();
+                    const jid = el.getAttribute('jid');
+                    const myJid = _converse.session.get('jid');
+                    const roomId = Math.random().toString(36).slice(2, 10);
+
+                    const chatbox = _converse.state.chatboxes.get(jid);
+                    const receiverUrl = `https://${location.host}/call.html?room=${roomId}&name=${encodeURIComponent(jid)}`;
+                    chatbox.sendMessage({ body: `📹 Входящий видеозвонок. Открой ссылку: ${receiverUrl}` });
+
+                    window.open(
+                        `/call.html?room=${roomId}&name=${encodeURIComponent(myJid)}&initiator=1`,
+                        '_blank', 'width=900,height=600'
+                    );
+                },
+                i18n_title: 'Видеозвонок',
+                i18n_text: 'Звонок',
+                icon_class: 'fa-video',
+                name: 'video-call',
+                standalone: false,
+            });
+
+            return buttons;
+        });
     }
 });

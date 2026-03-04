@@ -60,7 +60,6 @@ services:
     entrypoint: /bin/sh -c
     command: >
       "turnserver
-      --lt-cred-mech
       --use-auth-secret
       --static-auth-secret=$$TURN_SECRET
       --realm=$$DOMAIN
@@ -68,6 +67,15 @@ services:
       --pkey=/etc/letsencrypt/live/$$DOMAIN/privkey.pem
       --no-tlsv1
       --no-tlsv1_1"
+      
+  peerjs:
+    image: peerjs/peerjs-server
+    container_name: xmpp-peerjs
+    restart: unless-stopped
+    networks:
+      - xmpp-net
+    environment:
+      - PORT=9000
 
   postgres:
     image: postgres:15-alpine
