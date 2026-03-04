@@ -15,10 +15,11 @@ modules_enabled = {
     "csi_simple";
     "ping";
     "register";
+    "external_services";
     
     -- Chats
     "reactions";
-    
+
     -- OMEMO
     "pubsub";
     "pep";
@@ -37,6 +38,12 @@ modules_enabled = {
     "admin_adhoc";
     "blocklist";
     "bookmarks";
+}
+
+external_services = {
+  { type = "stun", host = os.getenv("DOMAIN"), port = 3478 },
+  { type = "turn", host = os.getenv("DOMAIN"), port = 3478,
+    secret = os.getenv("TURN_SECRET"), ttl = 86400, transport = "udp" }
 }
 
 modules_disabled = {

@@ -23,6 +23,7 @@
     <script>
         converse.initialize({
             websocket_url: `wss://${window.location.host}/xmpp-websocket`,
+            assets_path: '/converse/dist/',
             authentication: 'login',
             keepalive: true,
             view_mode: 'fullscreen',
@@ -35,11 +36,12 @@
             
             use_system_emojis: false,  
             show_message_load_animation: true,
-            emoji_categories_url: '/converse/dist/emoji.json',
             muc_show_info_messages: true,
 
             sounds_path: '/converse/dist/sounds/',
             play_sounds: true,
+
+            enable_jingle: true,
 
             allow_contact_removal: true,
             allow_logout: true,
