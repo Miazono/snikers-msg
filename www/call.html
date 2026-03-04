@@ -17,18 +17,24 @@
     <video id="localVideo" autoplay muted playsinline></video>
     <video id="remoteVideo" autoplay playsinline></video>
   </div>
-  <div id="status">Подключение...</div>
+  <div id="status">Подключение к серверу...</div>
   <button onclick="hangup()">Завершить</button>
 
   <script>
-    const params = new URLSearchParams(location.search);
-    const roomId = params.get('room');
-    const myName = params.get('name') || ('user_' + Math.random().toString(36).slice(2,7));
+    const params   = new URLSearchParams(location.search);
+    const roomId   = params.get('room');
+    const isInit   = params.get('initiator') === '1';
 
-    const peer = new Peer(myName, {
-      host: location.hostname,
-      path: '/peerjs',
-      secure: true,
+    // Инициатор регистрируется как roomId + '-caller'
+    // Получатель регистрируется как roomId + '-receiver'
+    const myPeerId     = roomId + (isInit ? '-caller' : '-receiver');
+    const remotePeerId = roomId + (isInit ? '-receiver' : '-caller');
+
+    const peer = new Peer(myPeerId, {
+    host: location.hostname,
+    path: '/',          
+    secure: true,
+    port: 443,
       config: {
         iceServers: [
           { urls: 'stun:' + location.hostname + ':3478' },
@@ -39,38 +45,57 @@
 
     let localStream, currentCall;
 
+    peer.on('error', err => {
+      document.getElementById('status').textContent = 'Ошибка: ' + err.message;
+      console.error(err);
+    });
+
     navigator.mediaDevices.getUserMedia({ video: true, audio: true }).then(stream => {
       localStream = stream;
       document.getElementById('localVideo').srcObject = stream;
 
-      peer.on('open', () => {
-        document.getElementById('status').textContent = 'Ожидание собеседника...';
-        // Если не инициатор — ждём входящий звонок
-        peer.on('call', call => {
-          currentCall = call;
-          call.answer(stream);
-          call.on('stream', remote => {
-            document.getElementById('remoteVideo').srcObject = remote;
-            document.getElementById('status').textContent = 'Звонок активен';
-          });
-        });
+      peer.on('open', (id) => {
+        console.log('PeerJS connected, my ID:', id);
+        document.getElementById('status').textContent = isInit ? 'Вызов...' : 'Ожидание звонка...';
 
-        // Если инициатор — звоним на roomId (там ждёт второй участник)
-        if (params.get('initiator') === '1') {
+        if (isInit) {
+          // Инициатор ждёт 2с чтобы получатель успел подключиться, затем звонит
           setTimeout(() => {
-            currentCall = peer.call(roomId + '_receiver', stream);
+            console.log('Calling:', remotePeerId);
+            currentCall = peer.call(remotePeerId, stream);
+            if (!currentCall) {
+              document.getElementById('status').textContent = 'Не удалось дозвониться';
+              return;
+            }
             currentCall.on('stream', remote => {
               document.getElementById('remoteVideo').srcObject = remote;
               document.getElementById('status').textContent = 'Звонок активен';
             });
+            currentCall.on('error', err => {
+              document.getElementById('status').textContent = 'Ошибка звонка: ' + err.message;
+            });
           }, 2000);
+        } else {
+          // Получатель ждёт входящий звонок
+          peer.on('call', call => {
+            console.log('Incoming call from:', call.peer);
+            currentCall = call;
+            call.answer(stream);
+            call.on('stream', remote => {
+              document.getElementById('remoteVideo').srcObject = remote;
+              document.getElementById('status').textContent = 'Звонок активен';
+            });
+          });
         }
       });
+    }).catch(err => {
+      document.getElementById('status').textContent = 'Нет доступа к камере/микрофону: ' + err.message;
     });
 
     function hangup() {
       currentCall?.close();
       localStream?.getTracks().forEach(t => t.stop());
+      peer.destroy();
       window.close();
     }
   </script>

@@ -67,13 +67,14 @@ services:
       --pkey=/etc/letsencrypt/live/$$DOMAIN/privkey.pem
       --no-tlsv1
       --no-tlsv1_1"
-      
+
   peerjs:
     image: peerjs/peerjs-server
     container_name: xmpp-peerjs
     restart: unless-stopped
     networks:
       - xmpp-net
+    command: ["--port", "9000", "--path", "/peerjs"]
     environment:
       - PORT=9000
 

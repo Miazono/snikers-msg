@@ -1,6 +1,8 @@
 converse.plugins.add('snikers-ui', {
     initialize() {
         const { api } = this._converse;
+        const _converse = this._converse;
+        const { state, session } = this._converse;
 
         const applyBranding = () => {
             const brandLogo = document.querySelector('converse-brand-logo');
@@ -52,8 +54,7 @@ converse.plugins.add('snikers-ui', {
             tryAutofill();
         });
 
-        api.listen.on('getHeadingButtons', (el, buttons) => {
-            // Только для 1-на-1 чатов, не для групп
+api.listen.on('getHeadingButtons', (el, buttons) => {
             if (el.tagName.toLowerCase() !== 'converse-chat') return buttons;
 
             buttons.push({
