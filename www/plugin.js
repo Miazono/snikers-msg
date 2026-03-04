@@ -2,43 +2,54 @@ converse.plugins.add('snikers-ui', {
     initialize() {
         const { api } = this._converse;
 
-        api.listen.on('controlboxInitialized', () => {
-            // Заменяем логотип
+        const applyBranding = () => {
             const brandLogo = document.querySelector('converse-brand-logo');
-            if (brandLogo && !document.getElementById('snikers-brand')) {
-                brandLogo.innerHTML = `
-                    <div id="snikers-brand" style="
-                        display: flex;
-                        flex-direction: column;
-                        align-items: center;
-                        padding: 28px 0 16px;
-                        gap: 10px;">
-                        <img src="/images/logo.svg"
-                             width="60" height="60"
-                             style="object-fit:contain;"
-                             onerror="this.style.display='none'">
-                        <span style="
-                            font-size: 1.15rem;
-                            font-weight: 600;
-                            color: var(--foreground-color, #e8eaf0);
-                            letter-spacing: -0.02em;">
-                            Snikers MSG
-                        </span>
-                    </div>`;
-            }
+            if (!brandLogo) return;
 
-            // Убираем about-блок
+
+            brandLogo.innerHTML = `
+                <div id="snikers-brand" style="
+                    display:flex; align-items:center;
+                    justify-content:center; height:180px;">
+                    <img src="/custom/images/logo.png"
+                         style="max-width:900px; max-height:500px;
+                                width:auto; height:auto;"
+                         onerror="this.style.display='none'">
+                </div>`;
+
             document.querySelector('converse-about')?.remove();
+        };
+
+        api.listen.on('initialized', () => {
+            const tryReplace = (attempts = 0) => {
+                if (document.querySelector('converse-brand-logo')) {
+                    applyBranding();
+                } else if (attempts < 20) {
+                    setTimeout(() => tryReplace(attempts + 1), 100);
+                }
+            };
+            tryReplace();
+
+            document.addEventListener('click', () => {
+                setTimeout(applyBranding, 150);
+            }, true); // true = capture phase, раньше всех других обработчиков
         });
 
-        // Автозаполнение формы логина
-        api.listen.on('loginInitialized', () => {
-            document.querySelector('input[name="jid"]')
-                ?.setAttribute('autocomplete', 'username');
-            document.querySelector('input[type="password"]')
-                ?.setAttribute('autocomplete', 'current-password');
-            document.querySelector('form')
-                ?.setAttribute('autocomplete', 'on');
+        // Автозаполнение
+        api.listen.on('initialized', () => {
+            const tryAutofill = (attempts = 0) => {
+                const jidInput = document.querySelector('input[name="jid"]');
+                if (jidInput) {
+                    jidInput.setAttribute('autocomplete', 'username');
+                    document.querySelector('input[type="password"]')
+                        ?.setAttribute('autocomplete', 'current-password');
+                    document.querySelector('form')
+                        ?.setAttribute('autocomplete', 'on');
+                } else if (attempts < 20) {
+                    setTimeout(() => tryAutofill(attempts + 1), 100);
+                }
+            };
+            tryAutofill();
         });
     }
 });

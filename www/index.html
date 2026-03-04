@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Secure Messenger</title>
+    <title>SNICKERS</title>
+    <link rel="icon" type="image/png" href="/custom/images/icon.png">
     <link rel="stylesheet" href="/converse/dist/converse.min.css">
     <link rel="stylesheet" href="/custom/custom.css">
 
@@ -31,7 +32,15 @@
             show_controlbox_by_default: true,
             allow_contact_requests: true,
             sounds_path: '/converse/dist/sounds/',
+            message_limit: 0,
+            show_message_load_animation: true,
+            emoji_categories_url: '/converse/dist/emoji.json',
+            emoji_categories_url: '/converse/dist/emoji.json',
+            muc_show_info_messages: true,
             play_sounds: true,
+
+            use_system_emojis: true,  
+
             allow_contact_removal: true,
             allow_logout: true,
             message_archiving: 'always',
@@ -42,7 +51,7 @@
             send_chat_markers: true,  
             archived_messages_page_size: 50,
             loglevel: 'warn',
-            theme: 'default',
+            //theme: 'default',
             whitelisted_plugins: ['snikers-ui'],
             i18n: window.__ru_locale
         });
